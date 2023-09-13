@@ -11,7 +11,7 @@ android {
         applicationId "com.lisss79.speechmaticstranscription"
         minSdk 27
         targetSdk 33
-        versionCode 1
+        versionCode 130923
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

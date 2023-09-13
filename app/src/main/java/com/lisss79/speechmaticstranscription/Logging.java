@@ -12,7 +12,7 @@ import java.util.Calendar;
  * Класс для работы с логом приложения
  */
 public class Logging {
-    private final String build = "07072023";
+    private String build;
     private final File logFile;
     private final String TEMPLATE = "%1$td.%1$tm.%1$tY %1$tH:%1$tM:%1$tS %2$s %3$s";
     private final String startMessage = "Log started";
@@ -25,6 +25,7 @@ public class Logging {
     public Logging(File logFile, String type) {
         this.logFile = logFile;
         this.type = type;
+        build = String.valueOf(BuildConfig.VERSION_CODE);
     }
 
     public void write(String text) {

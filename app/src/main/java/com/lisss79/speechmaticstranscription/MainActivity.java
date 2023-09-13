@@ -572,8 +572,11 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
             // О программе
             case R.id.menuAbout:
                 log.write("Trying to show about window");
+                String text = String.format("Speechmatics Transcription %s\n" +
+                        "Build %s\n(c)2023 Lisss79 Studio",
+                        BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
                 InfoDialog about = new InfoDialog(this, "О программе", InfoDialog.INFO,
-                        "Speechmatics Transcription v1.0\n(c)2023 Lisss79 Studio");
+                        text);
                 about.show();
                 break;
 
@@ -586,7 +589,6 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
     /**
      * Получение и проверка URL файла от пользователя
      *
-     * @return ссылка на файл
      */
     private void getUrlFromUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
