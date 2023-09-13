@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/jobsList_cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        style="@style/JobList"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/jl_name"
+                style="@style/JobList.Big"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/jl_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/jl_date"
+                style="@style/JobList.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="date"
+                app:layout_constraintBaseline_toBaselineOf="@+id/jl_name"
+                app:layout_constraintEnd_toStartOf="@+id/jl_id" />
+
+            <TextView
+                android:id="@+id/jl_id"
+                style="@style/JobList.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="id"
+                app:layout_constraintBaseline_toBaselineOf="@+id/jl_date"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/jl_length"
+                style="@style/JobList.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="length"
+                app:layout_constraintBaseline_toBaselineOf="@+id/jl_status"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/jl_type"
+                style="@style/JobList.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="type"
+                app:layout_constraintBaseline_toBaselineOf="@+id/jl_status"
+                app:layout_constraintStart_toEndOf="@+id/jl_length" />
+
+            <TextView
+                android:id="@+id/jl_language"
+                style="@style/JobList.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="lang"
+                app:layout_constraintBaseline_toBaselineOf="@+id/jl_status"
+                app:layout_constraintStart_toEndOf="@+id/jl_type" />
+
+            <TextView
+                android:id="@+id/jl_op"
+                style="@style/JobList.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="op"
+                app:layout_constraintBaseline_toBaselineOf="@+id/jl_status"
+                app:layout_constraintStart_toEndOf="@+id/jl_language" />
+
+            <TextView
+                android:id="@+id/jl_status"
+                style="@style/JobList.Big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="status"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jl_name" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

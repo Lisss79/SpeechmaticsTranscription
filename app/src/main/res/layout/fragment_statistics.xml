@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textViewMonthlyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Текущий месяц: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyAccuracyStandardLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/textViewMonthlyLabel"
+        android:layout_alignParentStart="true"
+        android:text="Качество: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyAccuracyStandard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/textViewMonthlyLabel"
+        android:layout_toEndOf="@id/textViewMonthlyAccuracyStandardLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewMonthlyCountStandardLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyAccuracyStandardLabel"
+        android:layout_alignParentStart="true"
+        android:text="Работы: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyCountStandard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyAccuracyStandardLabel"
+        android:layout_toEndOf="@id/textViewMonthlyCountStandardLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewMonthlyDurationStandardLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyCountStandardLabel"
+        android:layout_alignParentStart="true"
+        android:text="Продолжительность: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyDurationStandard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyCountStandardLabel"
+        android:layout_toEndOf="@id/textViewMonthlyDurationStandardLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewMonthlyAccuracyEnhancedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/textViewMonthlyDurationStandardLabel"
+        android:layout_alignParentStart="true"
+        android:text="Качество: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyAccuracyEnhanced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/textViewMonthlyDurationStandardLabel"
+        android:layout_toEndOf="@id/textViewMonthlyAccuracyEnhancedLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewMonthlyCountEnhancedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyAccuracyEnhancedLabel"
+        android:layout_alignParentStart="true"
+        android:text="Работы: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyCountEnhanced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyAccuracyEnhancedLabel"
+        android:layout_toEndOf="@id/textViewMonthlyCountEnhancedLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewMonthlyDurationEnhancedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyCountEnhancedLabel"
+        android:layout_alignParentStart="true"
+        android:text="Продолжительность: " />
+
+    <TextView
+        android:id="@+id/textViewMonthlyDurationEnhanced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyCountEnhancedLabel"
+        android:layout_toEndOf="@id/textViewMonthlyDurationEnhancedLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewLimitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMonthlyDurationEnhancedLabel"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:text="Доступный лимит (стандартное/улучшеное): " />
+
+    <TextView
+        android:id="@+id/textViewLimit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewLimitLabel"
+        android:layout_alignParentStart="true"
+        android:text="\?/?" />
+
+    <TextView
+        android:id="@+id/textViewSummaryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewLimit"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:text="За все время: " />
+
+    <TextView
+        android:id="@+id/textViewSummaryCountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSummaryLabel"
+        android:layout_alignParentStart="true"
+        android:text="Работы: " />
+
+    <TextView
+        android:id="@+id/textViewSummaryCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSummaryLabel"
+        android:layout_toEndOf="@id/textViewSummaryCountLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewSummaryDurationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSummaryCountLabel"
+        android:layout_alignParentStart="true"
+        android:text="Продолжительность: " />
+
+    <TextView
+        android:id="@+id/textViewSummaryDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSummaryCountLabel"
+        android:layout_toEndOf="@id/textViewSummaryDurationLabel"
+        android:text="\?" />
+
+
+</RelativeLayout>

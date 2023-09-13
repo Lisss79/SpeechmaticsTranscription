@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuShowDetails"
+        android:title="Показать детали" />
+    <item
+        android:id="@+id/menuShowTranscript"
+        android:title="Показать расшифровку" />
+    <item
+        android:id="@+id/menuSaveTranscriptToFile"
+        android:title="Сохранить в файл" />
+    <item
+        android:id="@+id/menuDelete"
+        android:title="Удалить работу" />
+</menu>

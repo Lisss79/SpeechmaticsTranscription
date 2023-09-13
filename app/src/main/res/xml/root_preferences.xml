@@ -1,0 +1,92 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="Настройки работы"
+        app:key="job_category">
+
+        <ListPreference
+            app:key="type"
+            app:title="Тип работы"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:key="language"
+            app:title="Язык расшифровки"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:key="diarization"
+            app:title="Диаризация"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:key="operating_point"
+            app:title="Качество"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            app:defaultValue="false"
+            app:key="user_vocabulary"
+            app:summaryOn="Использовать"
+            app:summaryOff="Не использовать"
+            app:title="Пользовательский словарь" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="record_category"
+        app:title="Режим реального времени">
+
+        <Preference
+            android:defaultValue="10"
+            app:summary="10"
+            android:key="length_piece"
+            android:title="Длительность части, сек" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="display_category"
+        app:title="Интерфейс">
+
+        <SwitchPreference
+            app:defaultValue="false"
+            app:key="show_limit"
+            app:summaryOn="Показывать"
+            app:summaryOff="Не показывать"
+            app:title="Бесплатный лимит" />
+
+        <SwitchPreference
+            app:defaultValue="false"
+            app:key="show_deleted"
+            app:summaryOn="Показывать"
+            app:summaryOff="Не показывать"
+            app:title="Удаленные работы" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="Дополнительные"
+        app:key="extended_category">
+
+        <Preference
+            app:key="vocabulary"
+            app:title="Загрузить словарь" />
+
+        <Preference
+            app:key="notifications"
+            app:title="Уведомления" />
+
+        <Preference
+            app:key="token"
+            app:title="Изменить токен" />
+
+        <Preference
+            app:key="reset_data"
+            app:title="Очистить данные" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

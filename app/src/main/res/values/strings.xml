@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Speechmatics Transcription</string>
+    <string name="settings_name">Настройки</string>
+    <string name="jobslist_name">Список работ</string>
+    <string name="realtime_name">Расшифровка с микрофона</string>
+
+</resources>
