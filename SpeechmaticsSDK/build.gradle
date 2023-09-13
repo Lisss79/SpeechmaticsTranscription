@@ -59,7 +59,7 @@ afterEvaluate {
                 url = uri("https://maven.pkg.github.com/lisss79/SpeechmaticsSDK")
                 credentials {
                     username = "Lisss79"
-                    password = "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"
+                    password = ""
                 }
             }
         }
