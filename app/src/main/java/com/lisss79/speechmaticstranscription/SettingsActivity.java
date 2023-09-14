@@ -1,6 +1,5 @@
 package com.lisss79.speechmaticstranscription;
 
-import static com.lisss79.speechmaticstranscription.MainActivity.VOC_PREFS_NAME;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -26,6 +25,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import com.lisss79.speechmaticssdk.batch.SpeechmaticsBatchSDK;
 import com.lisss79.speechmaticssdk.batch.data.JobConfig;
@@ -33,11 +33,6 @@ import com.lisss79.speechmaticssdk.common.JsonKeysValues;
 import com.lisss79.speechmaticssdk.common.Language;
 import com.lisss79.speechmaticssdk.common.OperatingPoint;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String RESTART_FLAG = "RESTART_FLAG";
     private static final String FILE_URI = "FILE_URI";
     private static final String JOB_ID = "JOB_ID";
+    private static final String DIC_URI = "DIC_URI";
 
     // Текущее значение длинны части
     private static int currentPieceValue;
@@ -88,30 +84,21 @@ public class SettingsActivity extends AppCompatActivity {
             activity = getActivity();
             context = getContext();
             prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            dicPrefs = context.getSharedPreferences(VOC_PREFS_NAME, MODE_PRIVATE);
+            dicPrefs = context.getSharedPreferences(MainActivity.VOC_PREFS_NAME, MODE_PRIVATE);
 
-            // Лончер выбора аудиофайла для чтения
+            // Лончер выбора текстового файла для чтения в словарь
             filePickerLauncher =
                     registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                         if (uri != null) {
-                            SharedPreferences.Editor editor = dicPrefs.edit();
-                            try (InputStream is = context.getContentResolver().openInputStream(uri)) {
-                                BufferedReader br = new BufferedReader(
-                                        new InputStreamReader(is, StandardCharsets.UTF_16));
-                                String responseLine;
-                                while ((responseLine = br.readLine()) != null) {
-                                    System.out.println(responseLine);
-                                    Map.Entry<String, TreeSet<String>> entry =
-                                            getMapFromString(responseLine);
-                                    if(entry != null) {
-                                        System.out.println(entry);
-                                        editor.putStringSet(entry.getKey(), entry.getValue());
-                                    }
-                                }
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                            context.getContentResolver().takePersistableUriPermission(uri,
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(DIC_URI, uri.toString());
                             editor.apply();
+                            Intent intent = new Intent();
+                            intent.putExtra(RESTART_FLAG, true);
+                            activity.setResult(RESULT_OK, intent);
                         }
                     });
 
@@ -139,6 +126,15 @@ public class SettingsActivity extends AppCompatActivity {
             lpOP.setEntryValues(OperatingPoint.getAllCodes());
             if(lpOP.getValue() == null)
                 lpOP.setValue(SpeechmaticsBatchSDK.defOperatingPoint.getCode());
+
+            // Использовать ли пользовательский словарь
+            SwitchPreference spVocab = findPreference(JsonKeysValues.ADDITIONAL_VOCAB);
+            spVocab.setOnPreferenceChangeListener((preference, newValue) -> {
+                Intent intent = new Intent();
+                intent.putExtra(RESTART_FLAG, true);
+                activity.setResult(RESULT_OK, intent);
+                return true;
+            });
 
             // Обработка нажатия "очистить данные"
             Preference pReset = findPreference("reset_data");
@@ -237,7 +233,7 @@ public class SettingsActivity extends AppCompatActivity {
                 String key = s[0].trim();
                 List<String> valuesList = Arrays.asList(s[1].split(","));
                 valuesList.replaceAll(String::trim);
-                TreeSet<String> values = new TreeSet(valuesList);
+                TreeSet<String> values = new TreeSet<>(valuesList);
                 return Map.entry(key, values);
             } else return null;
         }

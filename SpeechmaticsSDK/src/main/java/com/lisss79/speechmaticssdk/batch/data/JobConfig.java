@@ -183,7 +183,7 @@ public class JobConfig {
             return this;
         }
         public Builder additionalVocab(@Nullable AdditionalVocab[] addVoc) {
-            if(addVoc != null) {
+            if(addVoc != null && addVoc.length > 0) {
                 tc.setAdditionalVocab(addVoc);
                 jc.setTranscriptionConfig(tc);
             }
@@ -431,8 +431,6 @@ public class JobConfig {
      * Часть JobConfig
      */
     public enum JobType {
-
-        //ALIGNMENT("alignment", "выравнивание", "alignment),
         TRANSCRIPTION("transcription", "расшифровка", "transcription");
 
         private final String name;

@@ -52,7 +52,7 @@ public class AddTranscript {
         if (json.has(METADATA)) jsonMetaData = json.getJSONObject(METADATA);
         if (jsonMetaData.has(START_TIME)) startTime = (float) jsonMetaData.getDouble(START_TIME);
         if (jsonMetaData.has(END_TIME)) endTime = (float) jsonMetaData.getDouble(END_TIME);
-        if (jsonMetaData.has(TRANSCRIPT)) transcript = jsonMetaData.getString(TRANSCRIPT).trim();
+        if (jsonMetaData.has(TRANSCRIPT)) transcript = jsonMetaData.getString(TRANSCRIPT);
 
         JSONArray jsonResults = new JSONArray();
         if (json.has(RESULTS)) jsonResults = json.getJSONArray(RESULTS);

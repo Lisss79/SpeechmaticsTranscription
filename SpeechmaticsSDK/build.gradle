@@ -11,6 +11,8 @@ android {
     defaultConfig {
         minSdk 26
         targetSdk 33
+        versionCode 130923
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -43,6 +45,9 @@ android {
     }
 }
 
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
 afterEvaluate {
     publishing {
         publications {
@@ -50,7 +55,7 @@ afterEvaluate {
                 from components.debug
                 groupId 'com.github.lisss79'
                 artifactId 'speechmaticssdk'
-                version = '1.0'
+                version = '1.0.0'
             }
         }
         repositories {
@@ -58,8 +63,8 @@ afterEvaluate {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/lisss79/SpeechmaticsSDK")
                 credentials {
-                    username = "Lisss79"
-                    password = ""
+                    username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                    password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
                 }
             }
         }

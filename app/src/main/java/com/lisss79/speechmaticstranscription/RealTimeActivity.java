@@ -1,5 +1,6 @@
 package com.lisss79.speechmaticstranscription;
 
+import static com.lisss79.speechmaticssdk.common.JsonKeysValues.ADDITIONAL_VOCAB;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.DIARIZATION;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.LANGUAGE;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.OPERATING_POINT;
@@ -27,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.lisss79.speechmaticssdk.common.AdditionalVocab;
 import com.lisss79.speechmaticssdk.common.Language;
 import com.lisss79.speechmaticssdk.common.OperatingPoint;
 import com.lisss79.speechmaticssdk.batch.SpeechmaticsBatchSDK;
@@ -43,12 +45,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.nio.ByteBuffer;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsRealTimeListener {
 
     private static final String AUTH_TOKEN = "AUTH_TOKEN";
+    private static final String VOC_PREFS_NAME = "vocabulary_preferences";
     private ActivityRealTimeBinding binding;
     private SpeechmaticsRealTimeSDK sm;
     private ActivityResultLauncher<String> fileSaverLauncher;
@@ -172,9 +177,10 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
 
     /**
      * Получение данных, сохраненных в Shared Preferences
-     * и создание конфигурации для расшифровки на из основе
+     * и создание конфигурации для расшифровки на их основе
      */
     private StartRecognition createStartRecognition() {
+        SharedPreferences vocPrefs = getSharedPreferences(VOC_PREFS_NAME, MODE_PRIVATE);
         StartRecognition.Builder builder = new StartRecognition.Builder();
         try {
             lengthOfPiece = prefs.getInt("length_piece", 10);
@@ -183,15 +189,30 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
         }
         Language lang = Language.getLanguage
                 (prefs.getString(LANGUAGE, SpeechmaticsRealTimeSDK.defLanguage.getCode()));
-        JobConfig.TranscriptionConfig.Diarization diar = JobConfig.TranscriptionConfig.Diarization.getDiarization
+        JobConfig.TranscriptionConfig.Diarization diar =
+                JobConfig.TranscriptionConfig.Diarization.getDiarization
                 (prefs.getString(DIARIZATION, SpeechmaticsBatchSDK.defDiarization.getCode()));
-        StartRecognition.TranscriptionConfigRT.DiarizationRT diarRT = SpeechmaticsRealTimeSDK.defDiarizationRT;
-        if(diar == JobConfig.TranscriptionConfig.Diarization.NONE) diarRT = StartRecognition.TranscriptionConfigRT.DiarizationRT.NONE;
+        StartRecognition.TranscriptionConfigRT.DiarizationRT diarRT;
+        if(diar == JobConfig.TranscriptionConfig.Diarization.NONE) diarRT =
+                StartRecognition.TranscriptionConfigRT.DiarizationRT.NONE;
         else diarRT = StartRecognition.TranscriptionConfigRT.DiarizationRT.SPEAKER;
         OperatingPoint op = OperatingPoint.getOperationPoint
                 (prefs.getString(OPERATING_POINT, SpeechmaticsRealTimeSDK.defOperatingPoint.getCode()));
+        boolean userVoc = prefs.getBoolean(ADDITIONAL_VOCAB, false);
+        AdditionalVocab[] addVoc = null;
+        if (userVoc) {
+            try {
+                Map<String, TreeSet<String>> map = (Map<String, TreeSet<String>>) vocPrefs.getAll();
+                if (map.isEmpty()) throw new Exception("No data in shared preferences");
+                addVoc = AdditionalVocab.fromMap(map);
 
-        StartRecognition sr = builder.diarization(diarRT).operatingPoint(op).language(lang).build();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        StartRecognition sr = builder.diarization(diarRT).operatingPoint(op)
+                .language(lang).additionalVocab(addVoc).build();
         log.write("Created start recognition (transcription config):");
         log.write(sr.toString());
         return sr;

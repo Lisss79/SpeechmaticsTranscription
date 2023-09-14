@@ -1,5 +1,6 @@
 package com.lisss79.speechmaticssdk.real_time.data;
 
+import static com.lisss79.speechmaticssdk.common.JsonKeysValues.ADDITIONAL_VOCAB;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.AUDIO_FORMAT;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.AUDIO_TYPE;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.DIARIZATION;
@@ -13,6 +14,7 @@ import static com.lisss79.speechmaticssdk.common.JsonKeysValues.TRANSCRIPTION_CO
 
 import androidx.annotation.NonNull;
 
+import com.lisss79.speechmaticssdk.common.AdditionalVocab;
 import com.lisss79.speechmaticssdk.common.Language;
 import com.lisss79.speechmaticssdk.common.OperatingPoint;
 import com.lisss79.speechmaticssdk.real_time.SpeechmaticsRealTimeSDK;
@@ -20,6 +22,7 @@ import com.lisss79.speechmaticssdk.real_time.SpeechmaticsRealTimeSDK;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -47,7 +50,7 @@ public class StartRecognition {
         this.audioFormat = audioFormat;
     }
 
-    public void setTranscriptionRTConfig(TranscriptionConfigRT config) {
+    public void setTranscriptionConfigRT(TranscriptionConfigRT config) {
         this.config = config;
     }
 
@@ -59,7 +62,7 @@ public class StartRecognition {
         return audioFormat;
     }
 
-    public TranscriptionConfigRT getTranscriptionRTConfig() {
+    public TranscriptionConfigRT getTranscriptionConfigRT() {
         return config;
     }
 
@@ -113,30 +116,38 @@ public class StartRecognition {
             sr = new StartRecognition();
             msg = sr.getMessage();
             af = sr.getAudioFormat();
-            tc = sr.getTranscriptionRTConfig();
+            tc = sr.getTranscriptionConfigRT();
         }
 
         public Builder language(Language l) {
             tc.setLanguage(l);
-            sr.setTranscriptionRTConfig(tc);
+            sr.setTranscriptionConfigRT(tc);
+            return this;
+        }
+
+        public Builder additionalVocab(AdditionalVocab[] av) {
+            if (av != null && av.length > 0) {
+                tc.setAdditionalVocab(av);
+                sr.setTranscriptionConfigRT(tc);
+            }
             return this;
         }
 
         public Builder diarization(TranscriptionConfigRT.DiarizationRT d) {
             tc.setDiarization(d);
-            sr.setTranscriptionRTConfig(tc);
+            sr.setTranscriptionConfigRT(tc);
             return this;
         }
 
         public Builder operatingPoint(OperatingPoint op) {
             tc.setOperatingPoint(op);
-            sr.setTranscriptionRTConfig(tc);
+            sr.setTranscriptionConfigRT(tc);
             return this;
         }
 
         public Builder entities(boolean ee) {
             tc.setEntities(ee);
-            sr.setTranscriptionRTConfig(tc);
+            sr.setTranscriptionConfigRT(tc);
             return this;
         }
 
@@ -293,12 +304,14 @@ public class StartRecognition {
         private Language language;
         private DiarizationRT diarization;
         private OperatingPoint operatingPoint;
+        private AdditionalVocab[] additionalVocab;
         private boolean enableEntities;
         private final String CR = System.lineSeparator();
 
         public TranscriptionConfigRT() {
             language = SpeechmaticsRealTimeSDK.defLanguage;
             diarization = SpeechmaticsRealTimeSDK.defDiarizationRT;
+            additionalVocab = null;
             operatingPoint = SpeechmaticsRealTimeSDK.defOperatingPoint;
             enableEntities = SpeechmaticsRealTimeSDK.defEnableEntities;
         }
@@ -323,6 +336,14 @@ public class StartRecognition {
             this.operatingPoint = operatingPoint;
         }
 
+        public AdditionalVocab[] getAdditionalVocab() {
+            return additionalVocab;
+        }
+
+        public void setAdditionalVocab(AdditionalVocab[] additionalVocab) {
+            this.additionalVocab = additionalVocab;
+        }
+
         public void setEntities(boolean enableEntities) {
             this.enableEntities = enableEntities;
         }
@@ -332,8 +353,9 @@ public class StartRecognition {
         public String toString() {
             return  LANGUAGE + ": " + language.getName() + ", " + CR +
                     DIARIZATION + ": " + diarization.getName() + ", " + CR +
-                    OPERATING_POINT + ": " + operatingPoint.getName()+ ", " + CR +
-                    ENABLE_ENTITIES + ": " + enableEntities;
+                    OPERATING_POINT + ": " + operatingPoint.getName() + ", " + CR +
+                    ENABLE_ENTITIES + ": " + enableEntities + ", " + CR +
+                    ADDITIONAL_VOCAB + ": " + Arrays.toString(additionalVocab);
         }
 
         public String toJsonString() {
@@ -343,6 +365,8 @@ public class StartRecognition {
                 json.put(DIARIZATION, diarization.getCode());
                 json.put(OPERATING_POINT, operatingPoint.getCode());
                 json.put(ENABLE_ENTITIES, enableEntities);
+                if(additionalVocab != null)
+                    json.put(ADDITIONAL_VOCAB, AdditionalVocab.toJsonArray(additionalVocab));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -356,6 +380,8 @@ public class StartRecognition {
                 json.put(DIARIZATION, diarization.getCode());
                 json.put(OPERATING_POINT, operatingPoint.getCode());
                 json.put(ENABLE_ENTITIES, enableEntities);
+                if(additionalVocab != null)
+                    json.put(ADDITIONAL_VOCAB, AdditionalVocab.toJsonArray(additionalVocab));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

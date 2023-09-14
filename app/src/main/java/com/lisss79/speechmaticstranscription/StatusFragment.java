@@ -58,6 +58,21 @@ public class StatusFragment extends Fragment {
         binding.textViewJobStatus.setText(sm.jobStatus.getName());
         String ts = ((MainActivity) context).isTranscriptionLoaded ? "получена" : "недоступна";
         binding.textViewTranscriptionStatus.setText(ts);
+        int userDicStatus = ((MainActivity) context).userDic;
+        binding.textViewDictionaryStatus.setText(getDicStatus(userDicStatus));
+    }
+
+    private String getDicStatus(int userDicStatus) {
+        String status = "";
+        if ((userDicStatus & MainActivity.DIC_ENABLED)
+                == MainActivity.DIC_ENABLED) status = "включен, ";
+        else status = "выключен, ";
+        if ((userDicStatus & MainActivity.DIC_LOADED_FROM_EXTERNAL_FILE)
+                == MainActivity.DIC_LOADED_FROM_EXTERNAL_FILE) status += "загружен из файла";
+        else if ((userDicStatus & MainActivity.DIC_LOADED_FROM_PREFS)
+                == MainActivity.DIC_LOADED_FROM_PREFS) status += "загружен из памяти";
+        else status += "не загружен";
+        return status;
     }
 
     public void refreshData(SpeechmaticsBatchSDK sm) {

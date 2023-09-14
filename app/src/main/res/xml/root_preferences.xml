@@ -27,7 +27,7 @@
 
         <SwitchPreference
             app:defaultValue="false"
-            app:key="user_vocabulary"
+            app:key="additional_vocab"
             app:summaryOn="Использовать"
             app:summaryOff="Не использовать"
             app:title="Пользовательский словарь" />

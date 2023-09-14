@@ -94,6 +94,7 @@
         android:layout_alignParentStart="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Расшифровка: " />
 
     <TextView
@@ -102,6 +103,22 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewJobStatusLabel"
         android:layout_toEndOf="@id/textViewTranscriptionStatusLabel"
+        android:text="\?" />
+
+    <TextView
+        android:id="@+id/textViewDictionaryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/textViewTranscriptionStatusLabel"
+        android:text="Доп. словарь: " />
+
+    <TextView
+        android:id="@+id/textViewDictionaryStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewTranscriptionStatusLabel"
+        android:layout_toEndOf="@id/textViewDictionaryLabel"
         android:text="\?" />
 
 

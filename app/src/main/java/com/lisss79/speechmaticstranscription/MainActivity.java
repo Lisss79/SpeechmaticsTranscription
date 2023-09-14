@@ -1,5 +1,6 @@
 package com.lisss79.speechmaticstranscription;
 
+import static com.lisss79.speechmaticssdk.common.JsonKeysValues.ADDITIONAL_VOCAB;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.DIARIZATION;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.ID;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.JOB_TYPE;
@@ -59,15 +60,20 @@ import com.lisss79.speechmaticssdk.common.OperatingPoint;
 import com.lisss79.speechmaticstranscription.databinding.ActivityMainBinding;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
@@ -80,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
     private static final String FILE_URI = "FILE_URI";
     private static final String FILE_URL = "FILE_URL";
     private static final String JOB_ID = "JOB_ID";
+    private static final String DIC_URI = "DIC_URI";
     private static final int REQUESTS_INTERVAL = 15000;
     private static final int INIT_INTERVAL = 100;
     private static final String RESTART_FLAG = "RESTART_FLAG";
@@ -107,6 +114,12 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
     private static final int SUMMARY_STATISTICS = 1;
     private static final int MONTHLY_STATISTICS = 2;
 
+    // Ключи для определения состояния пользовательского словаря
+    public static final int UNSPECIFIED = 0;
+    public static final int DIC_ENABLED = 0b1;
+    public static final int DIC_LOADED_FROM_EXTERNAL_FILE = 0b10;
+    public static final int DIC_LOADED_FROM_PREFS = 0b100;
+
     private SpeechmaticsBatchSDK sm;
     private Logging log;
     private SharedPreferences prefs;
@@ -117,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
     private InfoScreenAdapter infoScreenAdapter;
     private SummaryStatistics[] summaryStatistics = new SummaryStatistics[2];
     private SummaryStatistics[] monthlyStatistics = new SummaryStatistics[2];
+    private AdditionalVocab[] additionalVocabs = null;
     private Runnable refreshStatus;
     private AlertDialog dialogError;
     private TextView errorView;
@@ -143,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
     private int savedDataGot = NO;
     // Получена ли расшифровка
     private int transcriptionGot = NO;
-    // Обновлены ли занные на экране
+    // Обновлены ли данные на экране
     private int dataRefreshed = NO;
 
     private String text = "";
@@ -160,6 +174,9 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
 
     // Загружена ли в память расшифровка
     public boolean isTranscriptionLoaded = false;
+
+    // Состояние пользовательского словаря
+    public int userDic = UNSPECIFIED;
 
     @SuppressLint({"SourceLockedOrientationActivity", "ResourceType"})
     @Override
@@ -573,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
             case R.id.menuAbout:
                 log.write("Trying to show about window");
                 String text = String.format("Speechmatics Transcription %s\n" +
-                        "Build %s\n(c)2023 Lisss79 Studio",
+                                "Build %s\n(c)2023 Lisss79 Studio",
                         BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
                 InfoDialog about = new InfoDialog(this, "О программе", InfoDialog.INFO,
                         text);
@@ -588,7 +605,6 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
 
     /**
      * Получение и проверка URL файла от пользователя
-     *
      */
     private void getUrlFromUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -753,7 +769,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
      * @return конфигурация работы
      */
     private JobConfig createJobConfigFromPrefs() {
-        AdditionalVocab[] av = getUserVocabulary();
+        AdditionalVocab[] av = additionalVocabs;
         JobConfig.JobType type = JobConfig.JobType.getJobType
                 (prefs.getString(JOB_TYPE, SpeechmaticsBatchSDK.defJobType.getCode()));
         Language lang = Language.getLanguage
@@ -766,21 +782,81 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                 .operatingPoint(op).diarization(diar).language(lang).build();
     }
 
+    /**
+     * Возвращает пользовательский словарь
+     *
+     * @return пользовательский словарь
+     */
     @Nullable
     private AdditionalVocab[] getUserVocabulary() {
-        boolean userVoc = prefs.getBoolean("user_vocabulary", false);
-        if (!userVoc) return null;
+
+        // Получаем настройку "использовать пользовательский словарь"
+        userDic = UNSPECIFIED;
+        boolean enable = prefs.getBoolean(ADDITIONAL_VOCAB, false);
+        if (enable) userDic = DIC_ENABLED;
+
+        // Получаем uri файла со словарем
         SharedPreferences vocPrefs = getSharedPreferences(VOC_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = vocPrefs.edit();
+        Uri dicUri = Uri.parse(prefs.getString(DIC_URI, ""));
+        try (InputStream is = getContentResolver().openInputStream(dicUri)) {
+
+            // Файл найден, читаем данные в отдельный shared preferences (vocPrefs)
+            userDic = userDic | DIC_LOADED_FROM_EXTERNAL_FILE;
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(is, StandardCharsets.UTF_16));
+            editor.clear();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                Map.Entry<String, TreeSet<String>> entry = getMapFromString(responseLine);
+                if (entry != null) {
+                    System.out.println(entry);
+                    editor.putStringSet(entry.getKey(), entry.getValue());
+                }
+            }
+            editor.apply();
+        } catch (FileNotFoundException e) {
+            // Файл с пользовательским словарем не найден
+            e.printStackTrace();
+        } catch (IOException e) {
+            // Другая ошибка ввода-вывода
+            e.printStackTrace();
+            return null;
+        }
+
+        // Читаем данные из shared preferences
         AdditionalVocab[] voc = null;
         try {
             Map<String, TreeSet<String>> map = (Map<String, TreeSet<String>>) vocPrefs.getAll();
+            if (map.isEmpty()) throw new Exception("No data in shared preferences");
+            userDic = userDic | DIC_LOADED_FROM_PREFS;
             voc = AdditionalVocab.fromMap(map);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return voc;
+        return enable ? voc : null;
     }
+
+    /**
+     * Преобразует строку файла в запись map
+     * @param responseLine строка, прочитанная из файла
+     * @return запись map
+     */
+    @Nullable
+    private Map.Entry<String, TreeSet<String>> getMapFromString(String responseLine) {
+        if (responseLine.isEmpty()) return null;
+        String[] s = responseLine.split("=", 2);
+        String key = s[0].trim();
+        List<String> valuesList = new ArrayList<>();
+        if(s.length > 1) {
+            valuesList = Arrays.asList(s[1].split(","));
+            valuesList.replaceAll(String::trim);
+        }
+        TreeSet<String> values = new TreeSet<>(valuesList);
+        return Map.entry(key, values);
+    }
+
 
     /**
      * Получить токен из SharedPreferences
@@ -856,6 +932,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
             optionsMenu.findItem(R.id.menuSubmitJob2).setEnabled(false);
         }
         sm.getJobDetails(sm.jobId);
+        additionalVocabs = getUserVocabulary();
     }
 
     /**

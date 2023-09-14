@@ -51,6 +51,7 @@ public class SpeechmaticsRealTimeSDK {
 
     // Основные глобальные приватные переменные для работы SDK
     private int seqNo = 0;
+    private boolean firstSymbol = true;                 // Первый ли символ сейчас
     private final StartRecognition startRecognition;
     private String AUTH_TOKEN = "";
     private final Context context;
@@ -207,7 +208,7 @@ public class SpeechmaticsRealTimeSDK {
      * @param key временный ключ для авторизации
      */
     public void createConnection(String key) {
-        String lang = startRecognition.getTranscriptionRTConfig().getLanguage().getCode();
+        String lang = startRecognition.getTranscriptionConfigRT().getLanguage().getCode();
         URI uri;
         try {
             uri = new URI(String.format(("wss://%s/v2/%s"), ENDPOINT_URI, lang));
@@ -267,7 +268,9 @@ public class SpeechmaticsRealTimeSDK {
                 }
                 if(message.equals(AUDIO_ADDED)) {
                     msg.arg1 = AUDIO_ADDED_MESSAGE;
-                    msg.obj = Integer.parseInt(extraInfo);
+                    int seqNo = Integer.parseInt(extraInfo);
+                    msg.obj = seqNo;
+                    if (seqNo == 1) firstSymbol = true;
                     uiHandler.sendMessage(msg);
                 }
                 if(message.equals(END_OF_TRANSCRIPT)) {
@@ -325,7 +328,7 @@ public class SpeechmaticsRealTimeSDK {
     /**
      * Получает дополнительную информацию из ответного сообщения, важную для пользователя
      * @param js сообщение сервера
-     * @param message расшифрованный типа сообщения
+     * @param message расшифрованный тип сообщения
      * @return информация для пользователя
      */
     private String getExtraInfoFromMessage(JSONObject js, final String message) throws JSONException {
@@ -355,28 +358,34 @@ public class SpeechmaticsRealTimeSDK {
      * @return расшифровка
      */
     private String getTranscriptWithSpeakers(AddTranscript as) {
+        boolean firstInLine = true;
         boolean spaceNeed = false;
         StringBuilder textBuilder = new StringBuilder();
-        if(startRecognition.getTranscriptionRTConfig().getDiarization() == StartRecognition.TranscriptionConfigRT.DiarizationRT.NONE)
+        if(startRecognition.getTranscriptionConfigRT().getDiarization() ==
+                StartRecognition.TranscriptionConfigRT.DiarizationRT.NONE)
             textBuilder.append(as.getTranscript());
         else {
             ArrayList<AddTranscript.Results> results = as.getResults();
             for(AddTranscript.Results result : results) {
                 switch (result.getType()) {
                     case WORD:
-                        if(spaceNeed) textBuilder.append(" ");
+                        if((spaceNeed || firstInLine) && !firstSymbol) textBuilder.append(" ");
                         spaceNeed = true;
+                        firstSymbol = false;
                         textBuilder.append(result.getAlternatives().getContent());
                         break;
                     case PUNCTUATION:
-                        textBuilder.append(result.getAlternatives().getContent());
                         spaceNeed = true;
+                        firstSymbol = false;
+                        textBuilder.append(result.getAlternatives().getContent());
                         break;
                     case SPEAKER_CHANGE:
                         spaceNeed = false;
                         textBuilder.append(CR).append("Speaker change").append(CR);
+                        firstSymbol = true;
                         break;
                 }
+                firstInLine = false;
             }
         }
         return textBuilder.toString();
