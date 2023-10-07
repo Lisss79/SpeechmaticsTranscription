@@ -46,6 +46,7 @@ public class JobsListActivity extends AppCompatActivity
 
     // Выбранный пункт списка для контекстного меню
     private int position;
+    private String fileName;
 
     // Верхний отображаемый элемент
     private int firstPosition;

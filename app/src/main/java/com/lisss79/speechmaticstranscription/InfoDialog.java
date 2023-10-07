@@ -5,9 +5,18 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Диалог с текстом, кнопкой "ОК" и возможностью копирования текста в буфер
@@ -25,6 +34,7 @@ public class InfoDialog extends AlertDialog {
     private final int dialogType;
     private final Context context;
     private TextView textView;
+    private String fileName;
 
     public InfoDialog(Context context, String title, int dialogType, String text) {
         super(context);
@@ -32,6 +42,17 @@ public class InfoDialog extends AlertDialog {
         this.dialogType = dialogType;
         this.text = text;
         this.context = context;
+        this.fileName = "";
+        initDialog();
+    }
+
+    public InfoDialog(Context context, String title, int dialogType, String text, String fileName) {
+        super(context);
+        this.title = title;
+        this.dialogType = dialogType;
+        this.text = text;
+        this.context = context;
+        this.fileName = fileName;
         initDialog();
     }
 
@@ -57,7 +78,32 @@ public class InfoDialog extends AlertDialog {
         });
         setView(dialogView);
         setButton(BUTTON_POSITIVE, "OK", (dialogInterface, i) -> dismiss());
+        setButton(BUTTON_NEUTRAL, "Поделиться", (dialogInterface, i) -> {
+            Uri textFileUri = createTextFile(text);
+            if (textFileUri != null) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_STREAM, textFileUri);
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, "Расшифровка");
+                context.startActivity(shareIntent);
+            }
+        });
         if(dialogType == TRANSCRIPT) textView.setTextSize(14f);
+    }
+
+    private Uri createTextFile(String text) {
+        String name = "transcription.txt";
+        if (!fileName.isEmpty()) name = fileName;
+        File textFile = new File(context.getFilesDir(), name);
+        byte[] textBytes = text.getBytes();
+        try (FileOutputStream fos = new FileOutputStream(textFile)) {
+            fos.write(textBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return FileProvider.getUriForFile(context, "com.lisss79.fileprovider", textFile);
     }
 
     private int getIconId() {
