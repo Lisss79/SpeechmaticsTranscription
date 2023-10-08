@@ -52,7 +52,11 @@ public class InfoDialog extends AlertDialog {
         this.dialogType = dialogType;
         this.text = text;
         this.context = context;
-        this.fileName = fileName;
+        int index = fileName.lastIndexOf(".");
+        if (index > 0) {
+            this.fileName = fileName.substring(0, index) + ".txt";
+        }
+        else this.fileName = fileName;
         initDialog();
     }
 

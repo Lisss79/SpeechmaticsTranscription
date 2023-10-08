@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.lisss79.speechmaticssdk.common.JsonKeysValues;
 import com.lisss79.speechmaticssdk.common.Language;
 import com.lisss79.speechmaticssdk.common.OperatingPoint;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +154,31 @@ public class SettingsActivity extends AppCompatActivity {
                             editor.putString(FILE_URI, "");
                             editor.apply();
                             Toast.makeText(activity, "Данные очищены", Toast.LENGTH_SHORT).show();
+                        });
+                builder.show();
+                return true;
+            });
+
+            // Обработка нажатия "удалить временные файлы"
+            Preference pDelete = findPreference("delete_temp_files");
+            pDelete.setOnPreferenceClickListener(preference -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(true).setTitle("Предупреждение")
+                        .setMessage("Вы точно хотите удалить временные файлы?")
+                        .setIcon(R.drawable.ic_warning).setNegativeButton("Отмена", null)
+                        .setPositiveButton("OK", (dialogInterface, i) -> {
+                            File[] files = context.getFilesDir().listFiles();
+                            boolean res = true;
+                            if (files != null) {
+                                for (File file : files) {
+                                    if (!file.isDirectory()) res = res && file.delete();
+                                }
+
+                            }
+                            if (files != null && res) Toast.makeText(activity,
+                                    "Файлы удалены", Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(activity,
+                                    "Не удалось удалить файлы", Toast.LENGTH_SHORT).show();
                         });
                 builder.show();
                 return true;

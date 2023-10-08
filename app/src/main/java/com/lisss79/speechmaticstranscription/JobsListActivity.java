@@ -95,6 +95,7 @@ public class JobsListActivity extends AppCompatActivity
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         JobDetails jobDetails = adapter.getJobDetails(position);
+        fileName = jobDetails.getDataName();
         String id = jobDetails.getId();
         JobConfig.JobType jobType = jobDetails.getJobConfig().getJobType();
         switch (item.getItemId()) {
@@ -217,7 +218,7 @@ public class JobsListActivity extends AppCompatActivity
                 fileSaverLauncher.launch("");
             } else if (requestCode == SHOW) {
                 InfoDialog showTranscriptDialog = new InfoDialog(this,
-                        "Расшифровка аудио", InfoDialog.TRANSCRIPT, text);
+                        "Расшифровка аудио", InfoDialog.TRANSCRIPT, text, fileName);
                 showTranscriptDialog.show();
             }
         }

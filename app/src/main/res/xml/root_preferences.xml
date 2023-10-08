@@ -2,8 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="Настройки работы"
-        app:key="job_category">
+        app:key="job_category"
+        app:title="Настройки работы">
 
         <ListPreference
             app:key="type"
@@ -25,11 +25,21 @@
             app:title="Качество"
             app:useSimpleSummaryProvider="true" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="voc_category"
+        app:title="Пользовательский словарь">
+
+        <Preference
+            app:key="vocabulary"
+            app:title="Загрузить словарь" />
+
         <SwitchPreference
             app:defaultValue="false"
             app:key="additional_vocab"
-            app:summaryOn="Использовать"
             app:summaryOff="Не использовать"
+            app:summaryOn="Использовать"
             app:title="Пользовательский словарь" />
 
     </PreferenceCategory>
@@ -40,9 +50,9 @@
 
         <Preference
             android:defaultValue="10"
-            app:summary="10"
             android:key="length_piece"
-            android:title="Длительность части, сек" />
+            android:title="Длительность части, сек"
+            app:summary="10" />
 
     </PreferenceCategory>
 
@@ -53,26 +63,22 @@
         <SwitchPreference
             app:defaultValue="false"
             app:key="show_limit"
-            app:summaryOn="Показывать"
             app:summaryOff="Не показывать"
+            app:summaryOn="Показывать"
             app:title="Бесплатный лимит" />
 
         <SwitchPreference
             app:defaultValue="false"
             app:key="show_deleted"
-            app:summaryOn="Показывать"
             app:summaryOff="Не показывать"
+            app:summaryOn="Показывать"
             app:title="Удаленные работы" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="Дополнительные"
-        app:key="extended_category">
-
-        <Preference
-            app:key="vocabulary"
-            app:title="Загрузить словарь" />
+        app:key="extended_category"
+        app:title="Дополнительные">
 
         <Preference
             app:key="notifications"
@@ -81,6 +87,10 @@
         <Preference
             app:key="token"
             app:title="Изменить токен" />
+
+        <Preference
+            app:key="delete_temp_files"
+            app:title="Удалить временные файлы" />
 
         <Preference
             app:key="reset_data"

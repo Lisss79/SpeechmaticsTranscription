@@ -257,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                             log.write("File with audio: " + uri + " selected");
                             if (successfullyConnected)
                                 optionsMenu.findItem(R.id.menuSubmitJob).setEnabled(true);
+                                optionsMenu.findItem(R.id.menuSubmitJob2).setEnabled(true);
                         }
 
                         // Выбран некорректный файл
@@ -264,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                             binding.audioPlayer.setSourceUri(null);
                             binding.audioPlayer.setVisibility(View.INVISIBLE);
                             optionsMenu.findItem(R.id.menuSubmitJob).setEnabled(false);
+                            optionsMenu.findItem(R.id.menuSubmitJob2).setEnabled(false);
                         }
                     }
                 });
@@ -1079,7 +1081,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
      */
     private void showTranscript() {
         InfoDialog showTranscriptDialog = new InfoDialog(this,
-                "Расшифровка файла", InfoDialog.TRANSCRIPT, text);
+                "Расшифровка файла", InfoDialog.TRANSCRIPT, text, sm.fileName);
         showTranscriptDialog.show();
     }
 
