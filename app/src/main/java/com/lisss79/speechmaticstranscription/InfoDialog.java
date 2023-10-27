@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -82,17 +81,19 @@ public class InfoDialog extends AlertDialog {
         });
         setView(dialogView);
         setButton(BUTTON_POSITIVE, "OK", (dialogInterface, i) -> dismiss());
-        setButton(BUTTON_NEUTRAL, "Поделиться", (dialogInterface, i) -> {
-            Uri textFileUri = createTextFile(text);
-            if (textFileUri != null) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_STREAM, textFileUri);
-                sendIntent.setType("text/plain");
-                Intent shareIntent = Intent.createChooser(sendIntent, "Расшифровка");
-                context.startActivity(shareIntent);
-            }
-        });
+        if (dialogType == TRANSCRIPT) {
+            setButton(BUTTON_NEUTRAL, "Поделиться", (dialogInterface, i) -> {
+                Uri textFileUri = createTextFile(text);
+                if (textFileUri != null) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, textFileUri);
+                    sendIntent.setType("text/plain");
+                    Intent shareIntent = Intent.createChooser(sendIntent, "Расшифровка");
+                    context.startActivity(shareIntent);
+                }
+            });
+        }
         if(dialogType == TRANSCRIPT) textView.setTextSize(14f);
     }
 

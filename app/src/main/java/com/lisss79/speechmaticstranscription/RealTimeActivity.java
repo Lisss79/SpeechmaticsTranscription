@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -28,16 +29,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.lisss79.speechmaticssdk.batch.SpeechmaticsBatchSDK;
+import com.lisss79.speechmaticssdk.batch.data.JobConfig;
 import com.lisss79.speechmaticssdk.common.AdditionalVocab;
 import com.lisss79.speechmaticssdk.common.Language;
 import com.lisss79.speechmaticssdk.common.OperatingPoint;
-import com.lisss79.speechmaticssdk.batch.SpeechmaticsBatchSDK;
-import com.lisss79.speechmaticssdk.batch.data.JobConfig;
 import com.lisss79.speechmaticssdk.real_time.MicRecord;
-import com.lisss79.speechmaticssdk.real_time.statuses.RealTimeStatus;
 import com.lisss79.speechmaticssdk.real_time.SpeechmaticsRealTimeListener;
 import com.lisss79.speechmaticssdk.real_time.SpeechmaticsRealTimeSDK;
 import com.lisss79.speechmaticssdk.real_time.data.StartRecognition;
+import com.lisss79.speechmaticssdk.real_time.statuses.RealTimeStatus;
 import com.lisss79.speechmaticstranscription.databinding.ActivityRealTimeBinding;
 
 import java.io.File;
@@ -114,6 +115,10 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
                 recSeconds = 0;
                 binding.textViewTimer.setText(getFormattedTime(recSeconds));
                 isListening = true;
+
+                // Запрещаем выключение экрана
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
                 sm.getTempKey();
             } else {
                 // Остановка распознавания
@@ -123,6 +128,9 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
                 mr.stop();
                 isListening = false;
                 sm.sendEndOfStream();
+
+                // Разрешаем выключение экрана
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
 
@@ -412,6 +420,9 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
         InfoDialog showTranscriptDialog = new InfoDialog(this,
                 "Ошибка", InfoDialog.ERROR, errorText);
         showTranscriptDialog.show();
+
+        // Разрешаем выключение экрана
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
