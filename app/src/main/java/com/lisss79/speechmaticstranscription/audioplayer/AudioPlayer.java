@@ -110,10 +110,7 @@ public class AudioPlayer extends LinearLayout {
     }
 
     private void showText() {
-        // long offset = TimeZone.getDefault().getRawOffset();
-        // String valueText = String.format(Locale.getDefault(), "%1$tT", value * 1000L - offset);
         String valueText = DateUtils.formatElapsedTime(value);
-        // String maxText = String.format(Locale.getDefault(),"%1$tT", max * 1000L - offset);
         String maxText = DateUtils.formatElapsedTime(max);
         textView.setText(String.format("%s / %s", valueText, maxText));
     }

@@ -22,7 +22,7 @@ public class StatisticsFragment extends Fragment {
     private final float ENHANCED_LIMIT = 2;
     private FragmentStatisticsBinding binding;
     private SharedPreferences prefs;
-    private Context context;
+    private final Context context;
     private SummaryStatistics[] summaryStatistics;
     private SummaryStatistics[] monthlyStatistics;
     private boolean isCreated = false;

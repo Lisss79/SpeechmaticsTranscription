@@ -33,7 +33,7 @@ public class InfoDialog extends AlertDialog {
     private final int dialogType;
     private final Context context;
     private TextView textView;
-    private String fileName;
+    private final String fileName;
 
     public InfoDialog(Context context, String title, int dialogType, String text) {
         super(context);

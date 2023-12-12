@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.OpenableColumns;
@@ -894,7 +895,9 @@ public class SpeechmaticsBatchSDK {
 
                 // Получение продолжительности аудиофайла (если тип не подходит - ошибка)
                 String durationStr = "";
-                try (MediaMetadataRetriever mmr = new MediaMetadataRetriever()) {
+                MediaMetadataRetriever mmr = null;
+                try {
+                    mmr = new MediaMetadataRetriever();
                     mmr.setDataSource(context, uri);
                     durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                     try {
@@ -906,11 +909,20 @@ public class SpeechmaticsBatchSDK {
                         fileStatus = FileStatus.LOADING_ERROR;
                         return false;
                     }
-                } catch (RuntimeException | IOException e) {
+                } catch (RuntimeException e) {
                     e.printStackTrace();
                     duration = 0;
                     fileStatus = FileStatus.LOADING_ERROR;
                     return false;
+                }
+                finally {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        try {
+                            mmr.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
             } else {

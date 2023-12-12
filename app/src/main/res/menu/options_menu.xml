@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/current">
+    <group>
         <item
             android:id="@+id/menuSelectFile"
             android:title="Выбрать файл" />
@@ -20,7 +20,7 @@
             android:id="@+id/menuSaveTranscript"
             android:title="Сохранить расшифровку" />
     </group>
-    <group android:id="@+id/realTime">
+    <group>
         <item
             android:id="@+id/menuRealTime"
             android:title="Расшифровка с микрофона" />
@@ -31,7 +31,7 @@
     <item
         android:id="@+id/menuSettings"
         android:title="Настройки" />
-    <group android:id="@+id/about">
+    <group>
         <item
             android:id="@+id/menuAbout"
             android:title="О программе" />

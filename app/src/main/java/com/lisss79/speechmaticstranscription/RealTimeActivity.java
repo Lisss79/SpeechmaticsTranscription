@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
 
 import com.lisss79.speechmaticssdk.batch.SpeechmaticsBatchSDK;
 import com.lisss79.speechmaticssdk.batch.data.JobConfig;
@@ -210,6 +210,7 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
         AdditionalVocab[] addVoc = null;
         if (userVoc) {
             try {
+                @SuppressWarnings("unchecked")
                 Map<String, TreeSet<String>> map = (Map<String, TreeSet<String>>) vocPrefs.getAll();
                 if (map.isEmpty()) throw new Exception("No data in shared preferences");
                 addVoc = AdditionalVocab.fromMap(map);
@@ -309,7 +310,7 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        getOnBackPressedDispatcher().onBackPressed();
         return true;
     }
 

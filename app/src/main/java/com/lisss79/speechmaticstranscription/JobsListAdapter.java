@@ -29,7 +29,7 @@ import java.util.Locale;
 public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobsListHolder> {
 
     private final ArrayList<JobDetails> jobDetailsList;
-    private CardView[] cardViewArray;
+    private final CardView[] cardViewArray;
     private final LayoutInflater inflater;
     private final ItemClickedListener itemClickedListener;
     private final Context context;

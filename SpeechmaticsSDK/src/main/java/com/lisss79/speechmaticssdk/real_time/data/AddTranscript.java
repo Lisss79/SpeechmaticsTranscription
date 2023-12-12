@@ -29,7 +29,7 @@ public class AddTranscript {
     private float startTime;
     private float endTime;
     private String transcript;
-    private ArrayList<Results> results;
+    private final ArrayList<Results> results;
 
     private AddTranscript() {
         startTime = 0;

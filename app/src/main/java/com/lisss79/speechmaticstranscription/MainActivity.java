@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -43,6 +42,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.MenuCompat;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
     private ActivityResultLauncher<Intent> settingsLauncher;
     private ActivityMainBinding binding;
     private InfoScreenAdapter infoScreenAdapter;
-    private SummaryStatistics[] summaryStatistics = new SummaryStatistics[2];
-    private SummaryStatistics[] monthlyStatistics = new SummaryStatistics[2];
+    private final SummaryStatistics[] summaryStatistics = new SummaryStatistics[2];
+    private final SummaryStatistics[] monthlyStatistics = new SummaryStatistics[2];
     private AdditionalVocab[] additionalVocabs = null;
     private Runnable refreshStatus;
     private AlertDialog dialogError;
@@ -830,6 +830,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
         // Читаем данные из shared preferences
         AdditionalVocab[] voc = null;
         try {
+            @SuppressWarnings("unchecked")
             Map<String, TreeSet<String>> map = (Map<String, TreeSet<String>>) vocPrefs.getAll();
             if (map.isEmpty()) throw new Exception("No data in shared preferences");
             userDic = userDic | DIC_LOADED_FROM_PREFS;

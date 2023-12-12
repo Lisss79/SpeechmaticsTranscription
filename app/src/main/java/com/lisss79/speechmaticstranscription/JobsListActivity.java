@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,6 +82,16 @@ public class JobsListActivity extends AppCompatActivity
         if (data != null) auth_token = data.getStringExtra(AUTH_TOKEN);
         sm = new SpeechmaticsBatchSDK(this, auth_token, this);
         sm.getAllJobsDetails(includeDeleted);
+
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                adapter.hideList();
+                recyclerView.postDelayed(JobsListActivity.this::finish,
+                        (long) (adapter.DURATION_ANIMATION * 1.5));
+            }
+        });
+
     }
 
     @Override
@@ -121,14 +132,8 @@ public class JobsListActivity extends AppCompatActivity
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        getOnBackPressedDispatcher().onBackPressed();
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        adapter.hideList();
-        recyclerView.postDelayed(super::onBackPressed, (long) (adapter.DURATION_ANIMATION * 1.5));
     }
 
     /**

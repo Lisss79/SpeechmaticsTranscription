@@ -421,8 +421,6 @@ public class SpeechmaticsRealTimeSDK {
                 while ((responseLine = br.readLine()) != null) {
                     responseSB.append(responseLine.trim()).append(CR);
                 }
-                //errorMessage = new ErrorMessage();
-                //errorMessage.setCode(responseCode);
                 if (responseSB.length() != 0) {
                     response = responseSB.toString();
                 }
@@ -442,10 +440,8 @@ public class SpeechmaticsRealTimeSDK {
                 }
                 if (responseSB.length() != 0) {
                     response = responseSB.toString();
-                    //errorMessage = new ErrorMessage(response);
                 } else {
-                    //errorMessage = new ErrorMessage();
-                    //errorMessage.setCode(responseCode);
+
                 }
             } catch (NullPointerException | IOException e) {
                 e.printStackTrace();
@@ -454,8 +450,7 @@ public class SpeechmaticsRealTimeSDK {
 
         // Иначе - ответа от сервера не было
         else {
-            //errorMessage = new ErrorMessage();
-            //errorMessage.setCode(NO_DATA);
+
         }
         return response;
     }

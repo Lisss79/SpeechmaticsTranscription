@@ -12,13 +12,13 @@ import java.util.Calendar;
  * Класс для работы с логом приложения
  */
 public class Logging {
-    private String build;
+    private final String build;
     private final File logFile;
     private final String TEMPLATE = "%1$td.%1$tm.%1$tY %1$tH:%1$tM:%1$tS %2$s %3$s";
     private final String startMessage = "Log started";
     private final String stopMessage = "Log stopped";
     private final String clearMessage = "Log cleared";
-    private String type;
+    private final String type;
     public final static String TYPE_BATCH = "Batch:";
     public final static String TYPE_REAL_TIME = "Real Time:";
 

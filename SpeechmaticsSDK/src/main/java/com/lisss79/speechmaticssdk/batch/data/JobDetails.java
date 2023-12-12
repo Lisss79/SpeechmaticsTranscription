@@ -217,7 +217,7 @@ public class JobDetails {
         @Override
         public String toString() {
             if(errors.isEmpty()) return "нет данных";
-            StringBuilder sb = new StringBuilder("");
+            StringBuilder sb = new StringBuilder();
             errors.forEach((date, s) -> {
                 sb.append(new SimpleDateFormat(USER_CREATED_PATTERN, Locale.getDefault()).format(date))
                         .append(": ").append(s).append(". ");
