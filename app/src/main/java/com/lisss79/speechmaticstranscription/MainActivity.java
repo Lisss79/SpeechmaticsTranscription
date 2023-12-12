@@ -255,9 +255,10 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                             binding.audioPlayer.setSourceUri(uri);
                             binding.audioPlayer.setVisibility(View.VISIBLE);
                             log.write("File with audio: " + uri + " selected");
-                            if (successfullyConnected)
+                            if (successfullyConnected) {
                                 optionsMenu.findItem(R.id.menuSubmitJob).setEnabled(true);
                                 optionsMenu.findItem(R.id.menuSubmitJob2).setEnabled(true);
+                            }
                         }
 
                         // Выбран некорректный файл
