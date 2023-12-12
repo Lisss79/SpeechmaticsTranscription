@@ -555,7 +555,8 @@ public class SpeechmaticsBatchSDK {
                     jobType = jobDetails.getJobConfig().getJobType();
                 }
             }
-            if (responseCode == NO_DATA && id.equals(jobId)) jobStatus = JobStatus.UNKNOWN;
+            if (responseCode == NO_DATA && id.equals(jobId))
+                jobStatus = JobStatus.UNKNOWN;
             uiHandler.sendMessage(msg);
         });
     }

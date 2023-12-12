@@ -1011,6 +1011,13 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                 else if (sm.jobStatus.equals(JobStatus.REJECTED)) {
                     notifyText = String.format("Работа с id = %s отклонена сервером", sm.jobId);
                 }
+
+                // Если статус работы "неизвестно"
+                else if (sm.jobStatus.equals(JobStatus.UNKNOWN)) {
+                    notifyText = String.format("Статус работы с id = %s неизвестен. " +
+                            "Запросите позже.", sm.jobId);
+                }
+
                 notifyManager.notify(notificationId, notifyBuilder[JOB_DONE_INDEX]
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(notifyText))
                         .setContentIntent(pi).build());
