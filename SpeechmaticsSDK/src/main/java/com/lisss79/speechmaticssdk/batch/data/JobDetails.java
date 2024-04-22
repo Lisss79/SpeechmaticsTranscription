@@ -1,6 +1,5 @@
 package com.lisss79.speechmaticssdk.batch.data;
 
-import static com.lisss79.speechmaticssdk.common.JsonKeysValues.ALIGNMENT_CONFIG;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.CONFIG;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.CR;
 import static com.lisss79.speechmaticssdk.common.JsonKeysValues.CREATED_AT;
@@ -43,7 +42,6 @@ public class JobDetails {
     private JobStatus status;
     private JobConfig jobConfig;
     private JobConfig.TranscriptionConfig transcriptionConfig;
-    private JobConfig.AlignmentConfig alignmentConfig;
     private Errors errors;
     private final static String USER_CREATED_PATTERN = "d MMM yy, HH:mm:ss";
 
@@ -55,7 +53,6 @@ public class JobDetails {
         this.status = JobStatus.NONE;
         this.jobConfig = new JobConfig();
         this.transcriptionConfig = new JobConfig.TranscriptionConfig();
-        this.alignmentConfig = new JobConfig.AlignmentConfig();
         this.errors = new Errors();
     }
 
@@ -97,11 +94,6 @@ public class JobDetails {
                 JSONObject jsonTranscriptionConfig = jsonConfig.getJSONObject(TRANSCRIPTION_CONFIG);
                 String stringTranscriptionConfig = jsonTranscriptionConfig.toString();
                 transcriptionConfig = new JobConfig.TranscriptionConfig(stringTranscriptionConfig);
-            }
-            if (jsonConfig.has(ALIGNMENT_CONFIG)) {
-                JSONObject jsonAlignmentConfig = jsonConfig.getJSONObject(ALIGNMENT_CONFIG);
-                String stringAlignmentConfig = jsonAlignmentConfig.toString();
-                alignmentConfig = new JobConfig.AlignmentConfig(stringAlignmentConfig);
             }
         }
         if(json.has(ERRORS)) errors = new Errors(json.getJSONArray(ERRORS));
@@ -146,10 +138,6 @@ public class JobDetails {
 
     public JobConfig.TranscriptionConfig getTranscriptionConfig() {
         return transcriptionConfig;
-    }
-
-    public JobConfig.AlignmentConfig getAlignmentConfig() {
-        return alignmentConfig;
     }
 
     public Errors getErrors() {

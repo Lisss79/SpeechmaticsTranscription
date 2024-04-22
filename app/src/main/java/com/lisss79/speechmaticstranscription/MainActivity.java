@@ -593,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
             case R.id.menuAbout:
                 log.write("Trying to show about window");
                 String text = String.format("Speechmatics Transcription %s\n" +
-                                "Build %s\n(c)2023 Lisss79 Studio",
+                                "Build %s\n(c)2023-2024 Lisss79 Studio",
                         BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
                 InfoDialog about = new InfoDialog(this, "О программе", InfoDialog.INFO,
                         text);
@@ -1259,7 +1259,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                     break;
                 default:
                     notifyText = String.format("Работу с id = %s отправить не удалось. " +
-                            "Причина неизвестна.", id);
+                            "Код ошибки: " + responseCode + ".", id);
                     break;
             }
 

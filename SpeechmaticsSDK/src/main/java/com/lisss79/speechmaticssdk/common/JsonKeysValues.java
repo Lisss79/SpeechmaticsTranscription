@@ -49,7 +49,6 @@ public class JsonKeysValues {
     // Для конфигурации
     public final static String TRANSCRIPTION_CONFIG = "transcription_config";
     public final static String FETCH_DATA = "fetch_data";
-    public final static String ALIGNMENT_CONFIG = "alignment_config";
     public final static String ADDITIONAL_VOCAB = "additional_vocab";
     public final static String CONFIG = "config";
     public final static String LANGUAGE = "language";
