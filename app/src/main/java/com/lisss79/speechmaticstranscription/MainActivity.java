@@ -998,7 +998,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra(ID, sm.jobId);
                 PendingIntent pi = PendingIntent.getActivity(this, 0,
-                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 String notifyText = "";
 
                 // Если статус работы "выполнена"
@@ -1229,7 +1229,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
             Toast.makeText(this, "Работа отправлена", Toast.LENGTH_SHORT).show();
