@@ -90,6 +90,8 @@ public class RealTimeActivity extends AppCompatActivity implements SpeechmaticsR
         binding = ActivityRealTimeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        InsetsControl control = new InsetsControl(this);
+        control.setSystemBarsInsetsForView(R.id.real_time_main_layout);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         status = RealTimeStatus.NO_STATUS;

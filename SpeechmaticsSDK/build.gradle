@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.lisss79.speechmaticssdk'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 26
-        targetSdk 34
-        versionCode 230913
+        targetSdk 35
+        versionCode 250517
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -74,11 +74,8 @@ afterEvaluate {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'tech.gusavila92:java-android-websocket-client:1.2.2'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }

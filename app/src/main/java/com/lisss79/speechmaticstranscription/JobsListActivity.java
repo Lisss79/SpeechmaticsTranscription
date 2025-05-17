@@ -57,6 +57,8 @@ public class JobsListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jobs_list);
+        InsetsControl control = new InsetsControl(this);
+        control.setSystemBarsInsetsForView(R.id.jobs_list_main_layout);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

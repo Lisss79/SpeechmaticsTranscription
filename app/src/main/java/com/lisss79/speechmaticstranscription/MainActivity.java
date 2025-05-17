@@ -185,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        InsetsControl control = new InsetsControl(this);
+        control.setSystemBarsInsetsForView(R.id.main_layout);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Инициализация хранилища, уведомлений, медиаплеера и лога
@@ -593,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements SpeechmaticsBatch
             case R.id.menuAbout:
                 log.write("Trying to show about window");
                 String text = String.format("Speechmatics Transcription %s\n" +
-                                "Build %s\n(c)2023-2024 Lisss79 Studio",
+                                "Build %s\n(c)2023-2025 Lisss79 Studio",
                         BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
                 InfoDialog about = new InfoDialog(this, "О программе", InfoDialog.INFO,
                         text);
